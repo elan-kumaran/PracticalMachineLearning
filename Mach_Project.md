@@ -23,7 +23,8 @@ https://d396qusza40orc.cloudfront.net/predmachlearn/pml-testing.csv
 
 
 ### Load Data
-####Load Libraries
+
+#### Load Libraries
 Libraries required for this analysis are loaded below
 
 
@@ -51,8 +52,8 @@ dim(datainp)
 
 ### Analyse and Clean Data
 As you see above, there are 160 columns. The column 'classe' is what need to predict from the information available in rest of the fields. The below identifies the percentage for NA values in each of the columns and display a sample output. 
-
-####Identify NA columns
+ 
+#### Identify NA columns
 
 ```r
 percentage_na<-sapply(datainp,function(x){
@@ -72,8 +73,8 @@ percentage_na[30:40]
 It has been observed that there are many columns which has around 97% of NA values in that, so we need to ignore them for our prediction model.
 
 During exploratory data analysis, it has been observed that the first 7 fields has name,timestamp,window etc which are not found to be relevant for model purposes as they are not relevant to movement sensors. So they need removing as well.
-
-####Remove NA columns and first 7 columns
+ 
+#### Remove NA columns and first 7 columns
 
 ```r
 cleandata<-datainp[,colSums(is.na(datainp)) < 19000]
@@ -100,7 +101,8 @@ dim(filtered_data)
 ## [1] 19622    45
 ```
 
-###Prediction Models
+ 
+### Prediction Models
 
 Now the above dataset has the information which we believe is relevant for our prediction model. We first split the data into test(30%) and training dataset(70%). We train the model using the train dataset and validate the model usung the test dataset.
 
@@ -121,13 +123,13 @@ For classification , we try 3 different models as below
     Generalized Boosted Regression Models
   
   
-####Out of Sample error and Cross validation
+#### Out of Sample error and Cross validation
 For each of the models, we specific the number of folds for cross-validation as 5 to allow 5 resampling iterations. 
 
 The expectation is that the out of sample error i.e the error in applying the model to a test dataset not used during model building , to be less. If less we can conclude that the model is fit for purpose. 
 
 
-####Decision Trees
+#### Decision Trees
 We fit the model using the Becision tree method and predict the values of the test partition we created. But as seen in the outcome, the accuracy is just 49% which means the model we have built is not fit for the purposes.
 
 ```r
@@ -171,7 +173,7 @@ confusionMatrix(testing$classe,testval)
 ## Balanced Accuracy      0.7234  0.64448  0.63085  0.70213  0.84328
 ```
 
-####Random Forest
+#### Random Forest
 We fit the model using the Random forest method and predict the values of the test partition we created. As seen in the outcome, the accuracy is more than 99% which means the model. 
 
 The __out of sample error is just .0097__ so this model's performance is definitely better than the decision tree model.  This may be the best fit but we will have to try Generalized Boosted Regression as well
@@ -218,7 +220,7 @@ confusionMatrix(testing$classe,testval)
 ```
 
 
-####Generalized Boosted Regression Models
+#### Generalized Boosted Regression Models
 We fit the model using the Generalized Boosted Regression method and predict the values of the test partition we created. As seen in the outcome, the accuracy is more than 95% which is better than the decision tree model but less than  the Random Forest model. 
 
 ```r
@@ -263,10 +265,10 @@ confusionMatrix(testing$classe,testval)
 ```
 
 
-###Conclusion
+### Conclusion
 From the above models, it is evident that __Random Forest__ is best suited for this data, with the accuracy of over 99% and out of sample error(1-Accuracy) of .0097.  
 
-###Submission 
+### Submission 
 
 The model fit2 is used to predict the value of the test dataset provided during the assignment as seen below.
 
@@ -295,8 +297,8 @@ pml_write_files(finalval)
 
 
 
-###Appendix 
-####Decision Tree 
+### Appendix 
+#### Decision Tree 
 
 ```r
 plot(fit1)
@@ -304,7 +306,7 @@ plot(fit1)
 
 ![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11-1.png) 
 
-####Random Forest
+#### Random Forest
 
 ```r
 plot(fit2)
@@ -312,7 +314,7 @@ plot(fit2)
 
 ![plot of chunk unnamed-chunk-12](figure/unnamed-chunk-12-1.png) 
 
-####Generalized Boosted Regression Models
+#### Generalized Boosted Regression Models
 
 ```r
 plot(fit3)
